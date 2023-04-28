@@ -35,7 +35,7 @@ uint8_t rx;
 //       spi_read_blocking (spi_default, 0, &rx, 1);
 //       printf ("Data check: %d", rx);
 //     }
-bool flag =0;
+
    while (1) {
     if (spi_is_readable (spi_default)) {
       printf ("Reading data from SPI..\n");
@@ -44,19 +44,17 @@ bool flag =0;
       printf ("Data received: %d\n", rx);
       while(rx==10)
       {
-        uint8_t rx[3];
-         uint8_t data ;    
-        if( flag ==0)
+       
+         uint8_t data ;  
+         printf("rx:%d\n", rx)  ;
+        data = rx+1;
+        printf("data:%d\n", data);
+        spi_write_read_blocking (spi_default, &data, &rx, 1);
+        printf("command: %d, data sent to master: %d\n", rx,  data);
+       
+        if(rx!=10)
         {
-          data =7;
-        }
-        spi_write_read_blocking (spi_default, &data, rx, 1);
-        data = rx[0]+1;
-        printf("command: %d, data sent to master: %d\n\n", rx[0],  data);
-        flag =1;
-        if(rx[0]!=10)
-        {
-            break;
+            printf("incorrect command\n\n");
         }
 
       }
